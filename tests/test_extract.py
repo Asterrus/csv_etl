@@ -1,7 +1,7 @@
 import pytest
 
+from etl.extract import read_csv
 from exceptions import CSVReadError
-from utils import read_csv
 
 
 class TestCSVRead:
