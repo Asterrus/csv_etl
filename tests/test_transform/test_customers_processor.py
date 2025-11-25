@@ -44,8 +44,8 @@ class TestCustomersProcessor:
             {
                 "registration_date": [valid_date, invalid_date],
                 "customer_days": [
-                    (today - valid_date).days,
-                    (today - invalid_date).days,
+                    9.0,
+                    float("nan"),
                 ],
             }
         )

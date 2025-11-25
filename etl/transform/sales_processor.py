@@ -30,5 +30,8 @@ class SalesProcessor:
     def _add_total_price(self):
         self.data["total_price"] = self.data["quantity"] * self.data["unit_price"]
 
+    def _add_month_of_order(self):
+        self.data["month"] = self.data["order_date"].dt.month
+
     def process(self):
         self._add_total_price()

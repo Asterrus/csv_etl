@@ -8,7 +8,7 @@ class TestSalesProcessorValidation:
         data = pd.DataFrame({"order_date": ["2022-01-01", "invalid_date"]})
         processor = SalesProcessor(data)
         processor._validate_order_date()
-        expected = pd.DataFrame({"order_date": [pd.to_datetime("2022-01-01"), pd.NaT]})
+        expected = pd.DataFrame({"order_date": [pd.Timestamp("2022-01-01"), pd.NaT]})
         pd.testing.assert_frame_equal(processor.data, expected)
 
     def test_remove_duplicates(self):
@@ -22,14 +22,14 @@ class TestSalesProcessorValidation:
         data = pd.DataFrame({"quantity": ["10", "invalid"]})
         processor = SalesProcessor(data)
         processor._validate_quantity()
-        expected = pd.DataFrame({"quantity": [10, pd.to_numeric(pd.NA)]})
+        expected = pd.DataFrame({"quantity": [10, float("nan")]})
         pd.testing.assert_frame_equal(processor.data, expected)
 
     def test_unit_price_validation(self):
         data = pd.DataFrame({"unit_price": ["10.5", "invalid"]})
         processor = SalesProcessor(data)
         processor._validate_unit_price()
-        expected = pd.DataFrame({"unit_price": [10.5, pd.to_numeric(pd.NA)]})
+        expected = pd.DataFrame({"unit_price": [10.5, float("nan")]})
         pd.testing.assert_frame_equal(processor.data, expected)
 
 
@@ -37,17 +37,45 @@ class TestSalesProcessor:
     def test_add_total_price(self):
         data = pd.DataFrame(
             {
-                "quantity": [2, 3, pd.to_numeric(pd.NA), 4],
-                "unit_price": [10, 20, 1, pd.to_numeric(pd.NA)],
+                "quantity": [2, 3, float("nan"), 4],
+                "unit_price": [10, 20, 1, float("nan")],
             }
         )
         processor = SalesProcessor(data)
         processor._add_total_price()
         expected = pd.DataFrame(
             {
-                "quantity": [2, 3, pd.to_numeric(pd.NA), 4],
-                "unit_price": [10, 20, 1, pd.to_numeric(pd.NA)],
-                "total_price": [20, 60, pd.to_numeric(pd.NA), pd.to_numeric(pd.NA)],
+                "quantity": [2, 3, float("nan"), 4],
+                "unit_price": [10, 20, 1, float("nan")],
+                "total_price": [20, 60, float("nan"), float("nan")],
+            }
+        )
+        pd.testing.assert_frame_equal(processor.data, expected)
+
+    def test_add_month_of_order(self):
+        data = pd.DataFrame(
+            {
+                "order_date": [
+                    pd.Timestamp("2022-01-01"),
+                    pd.Timestamp("2024-05-01"),
+                    pd.NaT,
+                ],
+            }
+        )
+        processor = SalesProcessor(data)
+        processor._add_month_of_order()
+        expected = pd.DataFrame(
+            {
+                "order_date": [
+                    pd.Timestamp("2022-01-01"),
+                    pd.Timestamp("2024-05-01"),
+                    pd.NaT,
+                ],
+                "month": [
+                    pd.Timestamp("2022-01-01").month,
+                    pd.Timestamp("2024-05-01").month,
+                    float("nan"),
+                ],
             }
         )
         pd.testing.assert_frame_equal(processor.data, expected)
