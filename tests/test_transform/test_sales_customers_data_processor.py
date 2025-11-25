@@ -1,0 +1,2 @@
+class TestSalesCustomerDataProcessor:
+    pass
