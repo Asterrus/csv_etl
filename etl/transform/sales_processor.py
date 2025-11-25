@@ -3,7 +3,13 @@ import pandas as pd
 
 class SalesProcessor:
     def __init__(self, sales: pd.DataFrame):
-        self.sales = sales.copy()
+        self.data = sales.copy()
 
-    def validate(self):
+    def _remove_duplicates(self):
+        self.data.drop_duplicates(inplace=True)
+
+    def _validate(self):
         pass
+
+    def process(self):
+        self._remove_duplicates()

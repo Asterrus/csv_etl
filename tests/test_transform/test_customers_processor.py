@@ -24,5 +24,7 @@ class TestCustomersProcessor:
         customers = pd.DataFrame({"registration_date": ["2025-01-01"]})
         processor = CustomersProcessor(customers)
         processor._add_customer_days_column(today=pd.Timestamp("2025-01-10"))
-        assert "customer_days" in processor.customers.columns
-        assert processor.customers["customer_days"].iloc[0] == 9
+        expected = pd.DataFrame(
+            {"registration_date": pd.to_datetime(["2025-01-01"]), "customer_days": [9]}
+        )
+        pd.testing.assert_frame_equal(processor.data, expected)
