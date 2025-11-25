@@ -12,3 +12,7 @@ class SalesCustomersDataProcessor:
     def validate(self):
         self.sales_processor.validate()
         self.customers_processor.validate()
+
+    def process(self):
+        self.sales_processor.process()
+        self.customers_processor.process()
