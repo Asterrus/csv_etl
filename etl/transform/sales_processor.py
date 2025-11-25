@@ -27,5 +27,8 @@ class SalesProcessor:
         self._validate_quantity()
         self._validate_unit_price()
 
+    def _add_total_price(self):
+        self.data["total_price"] = self.data["quantity"] * self.data["unit_price"]
+
     def process(self):
-        pass
+        self._add_total_price()

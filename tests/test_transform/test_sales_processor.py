@@ -34,4 +34,20 @@ class TestSalesProcessorValidation:
 
 
 class TestSalesProcessor:
-    pass
+    def test_add_total_price(self):
+        data = pd.DataFrame(
+            {
+                "quantity": [2, 3, pd.to_numeric(pd.NA), 4],
+                "unit_price": [10, 20, 1, pd.to_numeric(pd.NA)],
+            }
+        )
+        processor = SalesProcessor(data)
+        processor._add_total_price()
+        expected = pd.DataFrame(
+            {
+                "quantity": [2, 3, pd.to_numeric(pd.NA), 4],
+                "unit_price": [10, 20, 1, pd.to_numeric(pd.NA)],
+                "total_price": [20, 60, pd.to_numeric(pd.NA), pd.to_numeric(pd.NA)],
+            }
+        )
+        pd.testing.assert_frame_equal(processor.data, expected)
