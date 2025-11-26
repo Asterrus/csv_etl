@@ -79,3 +79,18 @@ class TestSalesProcessor:
             }
         )
         pd.testing.assert_frame_equal(processor.data, expected)
+
+    def test_process(self):
+        data = pd.DataFrame(
+            {
+                "order_date": [
+                    pd.Timestamp("2022-01-01"),
+                ],
+                "quantity": [2],
+                "unit_price": [10],
+            }
+        )
+        processor = SalesProcessor(data)
+        processor.process()
+        assert "total_price" in processor.data.columns
+        assert "month" in processor.data.columns

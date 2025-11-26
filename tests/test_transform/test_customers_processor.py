@@ -50,3 +50,9 @@ class TestCustomersProcessor:
             }
         )
         pd.testing.assert_frame_equal(processor.data, expected)
+
+    def test_process(self):
+        customers = pd.DataFrame({"registration_date": [pd.Timestamp("2025-01-01")]})
+        processor = CustomersProcessor(customers)
+        processor.process()
+        assert "customer_days" in processor.data.columns

@@ -35,3 +35,4 @@ class SalesProcessor:
 
     def process(self):
         self._add_total_price()
+        self._add_month_of_order()
