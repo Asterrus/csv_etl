@@ -16,10 +16,14 @@ class SalesCustomersDataProcessor:
         self.customers_processor.validate()
 
     def _create_sales_summary_df(self) -> pd.DataFrame:
-        summary = self.sales_processor.data.groupby("category", as_index=False).agg(
+        """сводная таблица продаж по категориям товаров"""
+        summary = self.sales_processor.data.groupby(
+            "category",
+            as_index=False,
+        ).agg(
             total_sales=("order_id", "count"),
             total_quantity=("quantity", "sum"),
-            average_order_value=("total_price", "sum"),
+            average_order_value=("total_price", "sum"),  # TODO Проверить
             period_date=(
                 "month",
                 "max",  # Тут не уверен
@@ -28,8 +32,31 @@ class SalesCustomersDataProcessor:
 
         return summary  # type: ignore[reportReturnType]
 
+    def _create_product_ranking_df(self) -> pd.DataFrame:
+        """5 самых популярных товаров"""
+        product_ranking = (
+            self.sales_processor.data.groupby(
+                by="product_id",
+                as_index=False,
+            )
+            .agg(
+                product_name=("product_name", "first"),
+                total_sold=("quantity", "sum"),
+                total_revenue=("total_price", "sum"),
+            )
+            .sort_values("total_sold", ascending=False)
+        ).reset_index(drop=True)
+        product_ranking["rank_position"] = (
+            product_ranking["total_sold"]
+            .rank(method="first", ascending=False)
+            .astype(int)
+        )
+        product_ranking = product_ranking.head(5)
+        return product_ranking
+
     def process(self):
         self.sales_processor.process()
         self.customers_processor.process()
 
         sales_summary_df = self._create_sales_summary_df()
+        product_ranking_df = self._create_product_ranking_df()
