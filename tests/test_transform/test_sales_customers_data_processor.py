@@ -36,6 +36,7 @@ class TestSalesCustomerDataProcessor:
         pd.testing.assert_frame_equal(result_df, expected)
 
     def test_create_product_ranking_df(self):
+        # TODO Проверить влияние на тесты лишних данных
         sales_df = pd.DataFrame(
             {
                 "order_id": [1, 2, 3, 4, 5, 6, 7],
@@ -46,7 +47,7 @@ class TestSalesCustomerDataProcessor:
                 "price": [10, 20, 30, 40, 50, 60, 1],
                 "category": ["A", "A", "A", "A", "A", "A", "A"],
                 "month": ["Jan", "Jan", "Jan", "Jan", "Jan", "Jan", "Jan"],
-                "total_price": [10, 40, 90, 160, 250, 360, 1],
+                "total_price": [10, 40, 90, 160, 250, 360, 1],  # TODO Возможно float?
             }
         )
         sales_processor = SalesProcessor(sales_df)
@@ -60,6 +61,39 @@ class TestSalesCustomerDataProcessor:
                 "total_sold": [7, 5, 4, 3, 2],
                 "total_revenue": [370, 250, 160, 90, 40],
                 "rank_position": [1, 2, 3, 4, 5],
+            }
+        )
+        pd.testing.assert_frame_equal(result_df, expected)
+
+    def test_create_average_bill_by_region_df(self):
+        sales_df = pd.DataFrame(
+            {
+                "order_id": [1, 2, 3],
+                "customer_id": ["1", "2", "2"],
+                "product_id": [1, 2, 3],
+                "quantity": [2, 3, 1],
+                "price": [10, 20, 30],
+                "category": ["A", "B", "B"],
+                "month": ["Jan", "Feb", "Mar"],
+                "total_price": [20, 60, 30],
+            }
+        )
+        sales_processor = SalesProcessor(sales_df)
+        customers_df = pd.DataFrame(
+            {
+                "customer_id": ["1", "2"],
+                "region": ["1", "2"],
+            }
+        )
+        customers_processor = CustomersProcessor(customers_df)
+        processor = SalesCustomersDataProcessor(sales_processor, customers_processor)
+        result_df = processor._create_average_bill_by_region_df()
+        print("\nresult_df")
+        print(result_df)
+        expected = pd.DataFrame(
+            {
+                "region": ["1", "2"],
+                "average_bill": [20.0, 45.0],
             }
         )
         pd.testing.assert_frame_equal(result_df, expected)

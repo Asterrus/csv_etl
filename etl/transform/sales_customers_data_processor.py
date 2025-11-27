@@ -54,9 +54,26 @@ class SalesCustomersDataProcessor:
         product_ranking = product_ranking.head(5)
         return product_ranking
 
+    def _create_average_bill_by_region_df(self):
+        result = (
+            pd.merge(
+                left=self.sales_processor.data,
+                right=self.customers_processor.data,
+                on="customer_id",
+                how="left",
+            )
+            .groupby(
+                by="region",
+                as_index=False,
+            )
+            .agg(average_bill=("total_price", "mean"))
+        )
+        return result
+
     def process(self):
         self.sales_processor.process()
         self.customers_processor.process()
 
         sales_summary_df = self._create_sales_summary_df()
         product_ranking_df = self._create_product_ranking_df()
+        average_bill_by_region_df = self._create_average_bill_by_region_df()
