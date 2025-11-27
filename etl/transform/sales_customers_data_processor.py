@@ -23,7 +23,7 @@ class SalesCustomersDataProcessor:
         ).agg(
             total_sales=("order_id", "count"),
             total_quantity=("quantity", "sum"),
-            average_order_value=("total_price", "sum"),  # TODO Проверить
+            average_order_value=("total_price", "mean"),
             period_date=(
                 "month",
                 "max",  # Тут не уверен

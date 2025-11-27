@@ -29,14 +29,13 @@ class TestSalesCustomerDataProcessor:
                 "category": ["A", "B"],
                 "total_sales": [1, 2],
                 "total_quantity": [2, 4],
-                "average_order_value": [20, 90],
+                "average_order_value": [20, 45.0],
                 "period_date": ["Jan", "Mar"],
             }
         )
         pd.testing.assert_frame_equal(result_df, expected)
 
     def test_create_product_ranking_df(self):
-        """5 самых популярных товаров"""
         sales_df = pd.DataFrame(
             {
                 "order_id": [1, 2, 3, 4, 5, 6, 7],
