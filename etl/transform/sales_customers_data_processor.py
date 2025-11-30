@@ -10,6 +10,9 @@ class SalesCustomersDataProcessor:
     ):
         self.sales_processor = sales_processor
         self.customers_processor = customers_processor
+        self.sales_summary_df = None
+        self.product_ranking_df = None
+        self.average_bill_by_region_df = None
 
     def validate(self):
         self.sales_processor.validate()
@@ -74,6 +77,6 @@ class SalesCustomersDataProcessor:
         self.sales_processor.process()
         self.customers_processor.process()
 
-        sales_summary_df = self._create_sales_summary_df()
-        product_ranking_df = self._create_product_ranking_df()
-        average_bill_by_region_df = self._create_average_bill_by_region_df()
+        self.sales_summary_df = self._create_sales_summary_df()
+        self.product_ranking_df = self._create_product_ranking_df()
+        self.average_bill_by_region_df = self._create_average_bill_by_region_df()
