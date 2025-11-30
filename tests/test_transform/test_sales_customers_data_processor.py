@@ -99,8 +99,7 @@ class TestSalesCustomerDataProcessor:
         customers_processor = CustomersProcessor(customers_df)
         processor = SalesCustomersDataProcessor(sales_processor, customers_processor)
         result_df = processor._create_average_bill_by_region_df()
-        print("\nresult_df")
-        print(result_df)
+
         expected = pd.DataFrame(
             {
                 "region": ["1", "2"],

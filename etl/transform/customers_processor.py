@@ -1,6 +1,6 @@
 import pandas as pd
 
-from exceptions import InvalidEmailError
+from etl.exceptions import InvalidEmailError
 
 
 def validate_email(df: pd.DataFrame):

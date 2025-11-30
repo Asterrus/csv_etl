@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 
-from exceptions import CSVReadError
+from etl.exceptions import CSVReadError
 
 logger = logging.getLogger(__name__)
 

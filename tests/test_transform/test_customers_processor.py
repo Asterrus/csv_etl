@@ -1,8 +1,8 @@
 import pandas as pd
 import pytest
 
+from etl.exceptions import InvalidEmailError
 from etl.transform.customers_processor import CustomersProcessor
-from exceptions import InvalidEmailError
 
 
 @pytest.fixture
