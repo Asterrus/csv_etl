@@ -29,9 +29,14 @@ class SalesCustomersDataProcessor:
             average_order_value=("total_price", "mean"),
             period_date=(
                 "month",
-                "max",  # Тут не уверен
+                "max",
             ),
         )
+
+        # Конвертировать period_date в DATE (первое число месяца)
+        summary["period_date"] = pd.to_datetime(
+            summary["period_date"] + "-01", format="%Y-%m-%d", errors="coerce"
+        ).dt.date
 
         return summary  # type: ignore[reportReturnType]
 

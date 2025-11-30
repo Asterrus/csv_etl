@@ -72,9 +72,9 @@ class TestSalesProcessor:
                     pd.NaT,
                 ],
                 "month": [
-                    pd.Timestamp("2022-01-01").month,
-                    pd.Timestamp("2024-05-01").month,
-                    float("nan"),
+                    "2022-01",
+                    "2024-05",
+                    None,
                 ],
             }
         )

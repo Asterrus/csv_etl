@@ -31,7 +31,7 @@ class SalesProcessor:
         self.data["total_price"] = self.data["quantity"] * self.data["unit_price"]
 
     def _add_month_of_order(self):
-        self.data["month"] = self.data["order_date"].dt.month
+        self.data["month"] = self.data["order_date"].dt.strftime("%Y-%m")
 
     def process(self):
         self._add_total_price()

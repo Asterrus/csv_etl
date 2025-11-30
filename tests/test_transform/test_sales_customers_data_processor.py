@@ -15,7 +15,7 @@ class TestSalesCustomerDataProcessor:
                 "quantity": [2, 3, 1],
                 "price": [10, 20, 30],
                 "category": ["A", "B", "B"],
-                "month": ["Jan", "Feb", "Mar"],
+                "month": ["2022-01", "2022-02", "2022-03"],
                 "total_price": [20, 60, 30],
             }
         )
@@ -30,7 +30,10 @@ class TestSalesCustomerDataProcessor:
                 "total_sales": [1, 2],
                 "total_quantity": [2, 4],
                 "average_order_value": [20, 45.0],
-                "period_date": ["Jan", "Mar"],
+                "period_date": [
+                    pd.to_datetime("2022-01-01").date(),
+                    pd.to_datetime("2022-03-01").date(),
+                ],
             }
         )
         pd.testing.assert_frame_equal(result_df, expected)
@@ -46,7 +49,15 @@ class TestSalesCustomerDataProcessor:
                 "quantity": [1, 2, 3, 4, 5, 6, 1],
                 "price": [10, 20, 30, 40, 50, 60, 1],
                 "category": ["A", "A", "A", "A", "A", "A", "A"],
-                "month": ["Jan", "Jan", "Jan", "Jan", "Jan", "Jan", "Jan"],
+                "month": [
+                    "2022-01",
+                    "2022-01",
+                    "2022-01",
+                    "2022-01",
+                    "2022-01",
+                    "2022-01",
+                    "2022-01",
+                ],
                 "total_price": [10, 40, 90, 160, 250, 360, 1],  # TODO Возможно float?
             }
         )
@@ -74,7 +85,7 @@ class TestSalesCustomerDataProcessor:
                 "quantity": [2, 3, 1],
                 "price": [10, 20, 30],
                 "category": ["A", "B", "B"],
-                "month": ["Jan", "Feb", "Mar"],
+                "month": ["2022-01", "2022-02", "2022-03"],
                 "total_price": [20, 60, 30],
             }
         )
