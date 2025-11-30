@@ -1,21 +1,23 @@
-from etl.load import create_tables, get_connection
+from etl.load import create_tables, get_engine
 
 
 class TestLoad:
-    def test_get_connection(self):
-        conn = get_connection()
-        assert conn
+    def test_get_engine(self):
+        engine = get_engine()
+        assert engine is not None
 
     def test_create_tables(self):
-        conn = get_connection()
-        create_tables(conn)
-        cur = conn.cursor()
-        cur.execute("""
-            SELECT table_name
-            FROM information_schema.tables
-            WHERE table_schema = 'public';
-        """)
-        tables = {row[0] for row in cur.fetchall()}
+        engine = get_engine()
+        with engine.begin() as connection:
+            create_tables(connection)
+            result = connection.exec_driver_sql(
+                """
+                SELECT table_name
+                FROM information_schema.tables
+                WHERE table_schema = 'public';
+                """
+            ).fetchall()
+        tables = {row[0] for row in result}
         expected_tables = {"sales", "customers", "sales_summary", "product_ranking"}
         missing = expected_tables - tables
         assert not missing, f"В базе не найдены таблицы: {missing}"
