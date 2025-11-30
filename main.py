@@ -1,3 +1,5 @@
+import logging
+
 from dotenv import load_dotenv
 
 from etl.extract import read_csv
@@ -7,6 +9,7 @@ from etl.transform.sales_customers_data_processor import SalesCustomersDataProce
 from etl.transform.sales_processor import SalesProcessor
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -19,18 +22,16 @@ def main():
     )
 
     processor.validate()
+    logger.info("Data validation completed.")
     processor.process()
+    logger.info("Data processing completed.")
 
     load_dataframe("customers", processor.customers_processor.data, connection)
     load_dataframe("sales", processor.sales_processor.data, connection)
     load_dataframe("sales_summary", processor.sales_summary_df, connection)
     load_dataframe("product_ranking", processor.product_ranking_df, connection)
 
-    print("Data processing completed.")
-    print("Sales:")
-    print(processor.sales_processor.data)
-    print("Customers:")
-    print(processor.customers_processor.data)
+    logger.info("Data loading completed.")
 
 
 if __name__ == "__main__":
