@@ -1,5 +1,7 @@
 import pandas as pd
+from sqlalchemy.engine import Connection
 
+from etl.load import load_dataframe
 from etl.transform.customers_processor import CustomersProcessor
 from etl.transform.sales_processor import SalesProcessor
 
@@ -85,3 +87,9 @@ class SalesCustomersDataProcessor:
         self.sales_summary_df = self._create_sales_summary_df()
         self.product_ranking_df = self._create_product_ranking_df()
         self.average_bill_by_region_df = self._create_average_bill_by_region_df()
+
+    def load_data(self, connection: Connection):
+        load_dataframe("sales", self.sales_processor.data, connection)
+        load_dataframe("customers", self.customers_processor.data, connection)
+        load_dataframe("sales_summary", self.sales_summary_df, connection)
+        load_dataframe("product_ranking", self.product_ranking_df, connection)

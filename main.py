@@ -3,7 +3,7 @@ import logging
 from dotenv import load_dotenv
 
 from etl.extract import read_csv
-from etl.load import create_tables, get_engine, load_dataframe
+from etl.load import create_tables, get_engine
 from etl.transform.customers_processor import CustomersProcessor
 from etl.transform.sales_customers_data_processor import SalesCustomersDataProcessor
 from etl.transform.sales_processor import SalesProcessor
@@ -26,17 +26,11 @@ def main():
 
         processor.validate()
         logger.info("Data validation completed.")
+
         processor.process()
         logger.info("Data processing completed.")
 
-        assert processor.sales_summary_df is not None
-        assert processor.product_ranking_df is not None
-
-        load_dataframe("customers", processor.customers_processor.data, connection)
-        load_dataframe("sales", processor.sales_processor.data, connection)
-        load_dataframe("sales_summary", processor.sales_summary_df, connection)
-        load_dataframe("product_ranking", processor.product_ranking_df, connection)
-
+        processor.load_data(connection)
         logger.info("Data loading completed.")
 
     logger.info("ETL pipeline completed successfully")
